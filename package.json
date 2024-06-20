@@ -1,0 +1,22 @@
+{
+  "name": "api-from-scratch",
+  "version": "1.0.0",
+  "description": "Creating an api from scratch using node.js",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "Later"
+  },
+  "keywords": [
+    "API"
+  ],
+  "author": "Gustavo Gorges",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^20.14.7",
+    "typescript": "^5.5.2"
+  }
+}
