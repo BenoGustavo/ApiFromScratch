@@ -1,14 +1,12 @@
 import http from "http";
-import memoDatabase from "./database/memory.js";
 import jsonDatabase from "./database/json.js";
 import { json } from "./middlewares/json.js";
 import { sendResponse } from "./response/send-response.js";
-import { userRoutes } from "./routes/user-routes.js";
+import { routes } from "./routes/router.js";
 import path from "path";
 
 const jsonDatabasePath = path.resolve("src", "database", "data", "data.json");
-const database = new jsonDatabase(jsonDatabasePath.toString());
-// const database = new memoDatabase();
+jsonDatabase.setFilePath(jsonDatabasePath);
 
 const server = http.createServer(async (req, res) => {
 	console.log(
@@ -17,7 +15,7 @@ const server = http.createServer(async (req, res) => {
 
 	await json(req, res);
 
-	const routeHandled = userRoutes(req, res, database);
+	const routeHandled = routes(req, res);
 
 	if (!routeHandled) {
 		sendResponse(res, 404, "Não caiu em nenhum if 😢");

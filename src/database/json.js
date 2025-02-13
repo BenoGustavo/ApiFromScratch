@@ -3,7 +3,9 @@ import fs from "fs";
 class JsonDatabase {
 	#data = this.#loadData();
 
-	constructor(filePath) {
+	constructor() {}
+
+	setFilePath(filePath) {
 		this.filePath = filePath;
 	}
 
@@ -55,4 +57,6 @@ class JsonDatabase {
 	}
 }
 
-export default JsonDatabase;
+const database = new JsonDatabase();
+
+export default database;
