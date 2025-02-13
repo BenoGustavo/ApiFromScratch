@@ -5,6 +5,7 @@ import database from "../../database/json.js";
 const userController = new UserController();
 userController.setDatabase(database);
 
+router.get("/users/:id", (req, res) => userController.getUser(req, res));
 router.get("/users", (req, res) => userController.getUsers(req, res));
 router.post("/users", (req, res) => userController.createUser(req, res));
 router.put("/users", (req, res) => userController.updateUser(req, res));

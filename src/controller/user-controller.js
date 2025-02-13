@@ -14,6 +14,16 @@ export class UserController {
 		this.database = database;
 	}
 
+	getUser(req, res) {
+		sendResponse(
+			res,
+			200,
+			"Bzz bzz fazendo busca de um usuário específico 🐝"
+		);
+
+		return true;
+	}
+
 	getUsers(req, res) {
 		try {
 			const users = this.database.read("users");
