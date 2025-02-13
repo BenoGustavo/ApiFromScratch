@@ -10,4 +10,4 @@ router.get("/users", (req, res) => userController.getUsers(req, res));
 router.post("/users", (req, res) => userController.createUser(req, res));
 router.put("/users", (req, res) => userController.updateUser(req, res));
 router.patch("/users", (req, res) => userController.patchUser(req, res));
-router.delete("/users", (req, res) => userController.deleteUser(req, res));
+router.delete("/users/:id", (req, res) => userController.deleteUser(req, res));

@@ -71,6 +71,15 @@ export class UserController {
 	}
 
 	deleteUser(req, res) {
+		const { id } = req.params;
+
+		try {
+			this.database.deleteOne("users", id);
+		} catch (error) {
+			sendResponse(res, 404, "Bzz bzz usuário não encontrado 🐝");
+			return true;
+		}
+
 		sendResponse(res, 200, "Bzz bzz deletando um usuário 🐝");
 		return true;
 	}
