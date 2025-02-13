@@ -7,7 +7,7 @@ class Router {
 		const routeParametersRegex = /:([a-zA-Z]+)/g;
 		const pathWithParams = path.replaceAll(
 			routeParametersRegex,
-			"([a-z0-9-_]+)"
+			"(?<$1>[a-z0-9-_]+)"
 		);
 		const pathRegex = new RegExp(`^${pathWithParams}$`);
 
@@ -60,6 +60,9 @@ class Router {
 		});
 
 		if (route) {
+			const params = req.url.match(route.url).groups;
+			req.params = params;
+
 			return route.callback(req, res);
 		}
 
