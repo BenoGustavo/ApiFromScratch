@@ -3,13 +3,24 @@ class Router {
 		this.routes = [];
 	}
 
+	#extractQueryParams(query) {
+		return query
+			.substr(1)
+			.split("&")
+			.reduce((acc, current) => {
+				const [key, value] = current.split("=");
+				acc[key] = value;
+				return acc;
+			}, {});
+	}
+
 	#buildRoutePath(path) {
 		const routeParametersRegex = /:([a-zA-Z]+)/g;
 		const pathWithParams = path.replaceAll(
 			routeParametersRegex,
 			"(?<$1>[a-z0-9-_]+)"
 		);
-		const pathRegex = new RegExp(`^${pathWithParams}$`);
+		const pathRegex = new RegExp(`^${pathWithParams}(?<query>\\?(.*))?$`);
 
 		return pathRegex;
 	}
@@ -62,6 +73,9 @@ class Router {
 		if (route) {
 			const params = req.url.match(route.url).groups;
 			req.params = params;
+			req.query = params.query
+				? this.#extractQueryParams(params.query)
+				: {};
 
 			return route.callback(req, res);
 		}
