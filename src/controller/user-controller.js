@@ -15,11 +15,20 @@ export class UserController {
 	}
 
 	getUser(req, res) {
-		sendResponse(
-			res,
-			200,
-			"Bzz bzz fazendo busca de um usuário específico 🐝"
-		);
+		const { id } = req.params;
+
+		try {
+			const user = this.database.readOne("users", id);
+
+			sendResponse(
+				res,
+				200,
+				"Bzz bzz fazendo busca de um usuário específico 🐝",
+				user
+			);
+		} catch (error) {
+			sendResponse(res, 404, "Bzz bzz usuário não encontrado 🐝");
+		}
 
 		return true;
 	}
@@ -39,34 +48,56 @@ export class UserController {
 			);
 			return true;
 		} catch (error) {
-			console.error(error);
-			sendResponse(res, 500, "Bzz bzz erro ao listar usuários 🐝", []);
+			sendResponse(res, 500, "Bzz bzz tabela não existe 🐝", []);
 			return true;
 		}
 	}
 
 	createUser(req, res) {
 		const { name, email } = req.body;
-		this.database.create("users", { id: randomUUID(), name, email });
-		sendResponse(res, 201, "Bzz bzz novo usuário criado 🐝");
+		const user = this.database.create("users", {
+			id: randomUUID(),
+			name,
+			email,
+		});
+		sendResponse(res, 201, "Bzz bzz novo usuário criado 🐝", user);
 		return true;
 	}
 
 	updateUser(req, res) {
+		const { name, email } = req.body;
+
+		const user = this.database.update("users", {
+			id: req.params.id,
+			name,
+			email,
+		});
+
 		sendResponse(
 			res,
 			200,
-			"Bzz bzz atualizando varias informações de um usuário 🐝"
+			"Bzz bzz atualizando varias informações de um usuário 🐝",
+			user
 		);
 		return true;
 	}
 
 	patchUser(req, res) {
-		sendResponse(
-			res,
-			200,
-			"Bzz bzz atualizando uma informação de um usuário 🐝"
-		);
+		req.body.id = req.params.id;
+
+		try {
+			const user = this.database.partialUpdate("users", req.body);
+
+			sendResponse(
+				res,
+				200,
+				"Bzz bzz atualizando uma informação de um usuário 🐝",
+				user
+			);
+		} catch (error) {
+			sendResponse(res, 404, "Bzz bzz usuário não encontrado 🐝");
+			return true;
+		}
 		return true;
 	}
 
@@ -80,7 +111,7 @@ export class UserController {
 			return true;
 		}
 
-		sendResponse(res, 200, "Bzz bzz deletando um usuário 🐝");
+		sendResponse(res, 204);
 		return true;
 	}
 }
