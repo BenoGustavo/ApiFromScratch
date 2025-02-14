@@ -28,6 +28,8 @@ class JsonDatabase {
 		}
 		this.#data[key].push(value);
 		this.#saveData();
+
+		return value;
 	}
 
 	read(key) {
@@ -51,8 +53,42 @@ class JsonDatabase {
 		if (!this.#data[key]) {
 			throw new Error("Key not found");
 		}
-		this.#data[key] = value;
-		this.#saveData();
+
+		const rowIndex = this.#data[key].findIndex(
+			(row) => row.id === value.id
+		);
+
+		if (rowIndex > -1) {
+			this.#data[key][rowIndex] = value;
+			this.#saveData();
+
+			return this.#data[key][rowIndex];
+		}
+
+		throw new Error("Row not found");
+	}
+
+	partialUpdate(key, value) {
+		if (!this.#data[key]) {
+			throw new Error("Key not found");
+		}
+
+		const rowIndex = this.#data[key].findIndex((row) => {
+			return row.id === value.id;
+		});
+
+		if (rowIndex > -1) {
+			this.#data[key][rowIndex] = {
+				...this.#data[key][rowIndex],
+				...value,
+			};
+
+			this.#saveData();
+
+			return this.#data[key][rowIndex];
+		}
+
+		throw new Error("Row not found");
 	}
 
 	delete(key) {
